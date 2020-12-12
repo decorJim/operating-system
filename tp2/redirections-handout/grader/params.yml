@@ -1,0 +1,7 @@
+COMMAND: ./prog1 2>&1 | ./prog2 > tmpfile; ./prog3
+COMMAND_ID: 1
+GRADING_LOG_PATH: /tmp/testlab_autograde
+PROG_A: johnDoe
+PROG_B: uncharted
+TKN_PROG_A: b061658b83ab74f6
+TKN_PROG_B: 84613ab6d3076bcd

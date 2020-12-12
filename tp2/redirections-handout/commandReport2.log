@@ -1,0 +1,4 @@
+prog2 err! bad input
+prog2/stdin --
+expected: testingstderrtestingstdout
+got: cò.ı
