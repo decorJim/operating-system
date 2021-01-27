@@ -69,19 +69,32 @@ void ajouterDansMemoire(struct RequeteMemoire* req, struct SystemeMemoire* mem) 
 
 void mettreAJourTLB(struct RequeteMemoire* req, struct SystemeMemoire* mem) {
 	// TODO
-    int dateDebut=10000;
-    for(int i=0;i<TAILLE_TLB;i++) {
-      if(mem->tlb->dateCreation[i]<dateDebut) {
-        dateDebut=mem->tlb->dateCreation[i];
-      }
-    }
+   int positionMin=0;
    
-    for(int i=0;i<TAILLE_TLB;i++) {
-      if(mem->tlb->dateCreation[i]==dateDebut) {
-        mem->tlb->numeroPage[i]=req->adresseVirtuelle;
-        mem->tlb->numeroCadre[i]=req->adressePhysique;
-      }
-    }
+       for(int position=0; position <TAILLE_TLB;++position){
+   
+               // on a une cadre tlb qui a au moins un emplacement vide
+           if(mem->tlb->entreeValide[position] == 0) {
+               
+               mem->tlb->entreeValide[position] = 1;
+               mem->tlb->dateCreation[position] = req->date;
+               mem->tlb->dernierAcces[position] = req->date;
+               mem->tlb->numeroPage[position] = calculerNumeroDePage(req->adresseVirtuelle);
+               mem->tlb->numeroCadre[position] = calculerNumeroDePage(req->adressePhysique);
+               break;
+           }
+   
+           // cas ou la tlb est remplite.
+           else if(mem->tlb->dateCreation[position] < mem->tlb->dateCreation[positionMin]){
+               positionMin = position;
+           }
+   
+           mem->tlb->entreeValide[positionMin] = 1;
+           mem->tlb->dateCreation[positionMin] = req->date;
+           mem->tlb->dernierAcces[positionMin] = req->date;
+           mem->tlb->numeroPage[positionMin] = calculerNumeroDePage(req->adresseVirtuelle);
+           mem->tlb->numeroCadre[positionMin] = calculerNumeroDePage(req->adressePhysique);
+       }
 }
 
 // NE PAS MODIFIER
