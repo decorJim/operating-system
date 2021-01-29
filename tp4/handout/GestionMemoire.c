@@ -25,6 +25,7 @@ void rechercherTLB(struct RequeteMemoire* req, struct SystemeMemoire* mem) {
       unsigned long dep=calculerDeplacementDansLaPage(req->adresseVirtuelle);
 
       if(page==numPageMem && mem->tlb->entreeValide[i]==1) {
+        // on utilise le numero de cadre trouver à i pour calculer adresse physique
         req->adressePhysique=calculerAdresseComplete(mem->tlb->numeroCadre[i],dep);
         mem->tlb->dernierAcces[i]=req->date;
         break;
@@ -40,6 +41,7 @@ void rechercherTableDesPages(struct RequeteMemoire* req, struct SystemeMemoire* 
     unsigned int page=calculerNumeroDePage(req->adresseVirtuelle);
     unsigned long deplacement=calculerDeplacementDansLaPage(req->adresseVirtuelle);
      
+      // pour la tdp l'index est la page et le contenu est le cadre dans le tableau
       if(mem->tp->entreeValide[page]==1) {
         req->adressePhysique=calculerAdresseComplete(mem->tp->numeroCadre[page],deplacement);
       }
@@ -57,6 +59,7 @@ void ajouterDansMemoire(struct RequeteMemoire* req, struct SystemeMemoire* mem) 
     for(int i=0;i<TAILLE_MEMOIRE;i++) {
      
      if(mem->memoire->utilisee[i]==0) {
+        // dans la memoire RAM, l'index est le numero de cadre
         unsigned long adresse=calculerAdresseComplete(i,deplacement);
         req->adressePhysique=adresse;
         mem->memoire->dateCreation[i]=req->date;
